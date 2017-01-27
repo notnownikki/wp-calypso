@@ -3,7 +3,6 @@
  */
 import { compact, startsWith } from 'lodash';
 import debugFactory from 'debug';
-import Lru from 'lru';
 import React from 'react';
 
 /**
@@ -15,16 +14,11 @@ import LoggedOutComponent from './logged-out';
 import Upload from 'my-sites/themes/theme-upload';
 import trackScrollPage from 'lib/track-scroll-page';
 import { DEFAULT_THEME_QUERY } from 'state/themes/constants';
-import { requestThemes, receiveThemes, setBackPath } from 'state/themes/actions';
+import { requestThemes, setBackPath } from 'state/themes/actions';
 import { getThemesForQuery } from 'state/themes/selectors';
 import { getAnalyticsData } from './helpers';
 
 const debug = debugFactory( 'calypso:themes' );
-const HOUR_IN_MS = 3600000;
-const themesQueryCache = new Lru( {
-	max: 500,
-	maxAge: HOUR_IN_MS
-} );
 
 function getProps( context ) {
 	const { tier, filter, vertical, site_id: siteId } = context.params;
@@ -110,11 +104,10 @@ export function fetchThemeData( context, next, shouldUseCache = false ) {
 	const cacheKey = context.path;
 
 	if ( shouldUseCache ) {
-		const cachedData = themesQueryCache.get( cacheKey );
-		if ( cachedData ) {
+		const themes = getThemesForQuery( context.store.getState(), siteId, query );
+		if ( themes ) {
 			debug( `found theme data in cache key=${ cacheKey }` );
-			context.store.dispatch( receiveThemes( cachedData.themes, siteId ) );
-			context.renderCacheKey = context.path + cachedData.timestamp;
+			context.renderCacheKey = context.path;
 			return next();
 		}
 	}
@@ -122,11 +115,7 @@ export function fetchThemeData( context, next, shouldUseCache = false ) {
 	context.store.dispatch( requestThemes( siteId, query ) )
 		.then( () => {
 			if ( shouldUseCache ) {
-				const themes = getThemesForQuery( context.store.getState(), siteId, query );
-				const timestamp = Date.now();
-				themesQueryCache.set( cacheKey, { themes, timestamp } );
-				context.renderCacheKey = context.path + timestamp;
-				debug( `caching theme data key=${ cacheKey }` );
+				context.renderCacheKey = context.path; // + timestamp;
 			}
 			next();
 		} )
