@@ -101,25 +101,19 @@ export function fetchThemeData( context, next, shouldUseCache = false ) {
 		page: 1,
 		number: DEFAULT_THEME_QUERY.number,
 	};
-	const cacheKey = context.path;
 
 	if ( shouldUseCache ) {
 		const themes = getThemesForQuery( context.store.getState(), siteId, query );
 		if ( themes ) {
-			debug( `found theme data in cache key=${ cacheKey }` );
-			context.renderCacheKey = context.path;
+			debug( 'found theme data in cache' );
 			return next();
 		}
 	}
 
 	context.store.dispatch( requestThemes( siteId, query ) )
 		.then( () => {
-			if ( shouldUseCache ) {
-				context.renderCacheKey = context.path; // + timestamp;
-			}
 			next();
-		} )
-		.catch( () => next() );
+		} );
 }
 
 export function fetchThemeDataWithCaching( context, next ) {
