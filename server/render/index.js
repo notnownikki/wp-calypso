@@ -80,7 +80,7 @@ export function serverRender( req, res ) {
 	}
 
 	if ( config.isEnabled( 'server-side-rendering' ) && context.layout && ! context.user ) {
-		const key = context.renderCacheKey || JSON.stringify( context.layout );
+		const key = context.path || JSON.stringify( context.layout );
 		Object.assign( context, render( context.layout, key ) );
 	}
 
