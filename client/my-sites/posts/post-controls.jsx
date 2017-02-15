@@ -17,7 +17,6 @@ import { ga } from 'lib/analytics';
 import { userCan } from 'lib/posts/utils';
 import { isPublicizeEnabled } from 'state/selectors';
 
-const view = () => ga.recordEvent( 'Posts', 'Clicked View Post' );
 const preview = () => ga.recordEvent( 'Posts', 'Clicked Preiew Post' );
 const edit = () => ga.recordEvent( 'Posts', 'Clicked Edit Post' );
 const copy = () => ga.recordEvent( 'Posts', 'Clicked Copy Post' );
@@ -37,6 +36,7 @@ const getAvailableControls = props => {
 		post,
 		site,
 		translate,
+		viewPost
 	} = props;
 	const controls = { main: [], more: [] };
 
@@ -57,10 +57,8 @@ const getAvailableControls = props => {
 	if ( 'publish' === post.status ) {
 		controls.main.push( {
 			className: 'view',
-			href: post.URL,
 			icon: 'external',
-			onClick: view,
-			target: '_blank',
+			onClick: viewPost,
 			text: translate( 'View' ),
 		} );
 
