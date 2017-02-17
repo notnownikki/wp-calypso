@@ -369,7 +369,7 @@ const Post = React.createClass( {
 		this.setState( { showShare: ! this.state.showShare } );
 	},
 
-	viewPost() {
+	viewPost( event ) {
 		this.analyticsEvents.viewPost;
 		event.preventDefault();
 		this.props.setPreviewUrl( this.props.post.URL );

@@ -57,7 +57,7 @@ const getAvailableControls = props => {
 	if ( 'publish' === post.status ) {
 		controls.main.push( {
 			className: 'view',
-			icon: 'external',
+			icon: 'visible',
 			onClick: viewPost,
 			text: translate( 'View' ),
 		} );

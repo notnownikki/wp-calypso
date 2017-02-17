@@ -35,6 +35,8 @@ import {
 import { setFrontPage } from 'state/sites/actions';
 import { userCan } from 'lib/site/utils';
 import { updateSitesList } from './helpers';
+import { setPreviewUrl } from 'state/ui/preview/actions';
+import { setLayoutFocus } from 'state/ui/layout-focus/actions';
 
 function recordEvent( eventAction ) {
 	analytics.ga.recordEvent( 'Pages', eventAction );
@@ -135,8 +137,10 @@ const Page = React.createClass( {
 		);
 	},
 
-	viewPage: function() {
-		window.open( this.props.page.URL );
+	viewPage: function( event ) {
+		event.preventDefault();
+		this.props.setPreviewUrl( this.props.page.URL );
+		this.props.setLayoutFocus( 'preview' );
 	},
 
 	getViewItem: function() {
@@ -159,7 +163,7 @@ const Page = React.createClass( {
 
 		return (
 			<PopoverMenuItem onClick={ this.viewPage }>
-				<Gridicon icon="external" size={ 18 } />
+				<Gridicon icon="visible" size={ 18 } />
 				{ this.translate( 'View Page' ) }
 			</PopoverMenuItem>
 		);
@@ -449,6 +453,8 @@ export default connect(
 		};
 	},
 	( dispatch ) => bindActionCreators( {
-		setFrontPage
+		setFrontPage,
+		setPreviewUrl,
+		setLayoutFocus
 	}, dispatch )
 )( Page );
