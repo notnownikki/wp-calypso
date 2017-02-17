@@ -370,7 +370,12 @@ const Post = React.createClass( {
 	},
 
 	viewPost( event ) {
-		this.analyticsEvents.viewPost;
+		if ( this.props.post.status && this.props.post.status === 'future' ) {
+			this.analyticsEvents.previewPost;
+		} else {
+			this.analyticsEvents.viewPost;
+		}
+
 		event.preventDefault();
 		this.props.setPreviewUrl( this.props.post.URL );
 		this.props.setLayoutFocus( 'preview' );
@@ -404,7 +409,7 @@ const Post = React.createClass( {
 					onDelete={ this.deletePost }
 					onRestore={ this.restorePost }
 					onToggleShare={ this.toggleShare }
-					viewPost={ this.viewPost }
+					onViewPost={ this.viewPost }
 					site={ site }
 				/>
 				<ReactCSSTransitionGroup

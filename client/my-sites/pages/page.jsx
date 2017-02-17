@@ -155,7 +155,7 @@ const Page = React.createClass( {
 		if ( this.props.page.status !== 'publish' ) {
 			return (
 				<PopoverMenuItem onClick={ this.viewPage }>
-					<Gridicon icon="external" size={ 18 } />
+					<Gridicon icon="visible" size={ 18 } />
 					{ this.translate( 'Preview' ) }
 				</PopoverMenuItem>
 			);

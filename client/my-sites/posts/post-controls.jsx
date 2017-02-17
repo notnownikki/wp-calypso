@@ -4,7 +4,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { localize } from 'i18n-calypso';
-import url from 'url';
 import classNames from 'classnames';
 import { includes, noop } from 'lodash';
 import Gridicon from 'gridicons';
@@ -17,7 +16,6 @@ import { ga } from 'lib/analytics';
 import { userCan } from 'lib/posts/utils';
 import { isPublicizeEnabled } from 'state/selectors';
 
-const preview = () => ga.recordEvent( 'Posts', 'Clicked Preiew Post' );
 const edit = () => ga.recordEvent( 'Posts', 'Clicked Edit Post' );
 const copy = () => ga.recordEvent( 'Posts', 'Clicked Copy Post' );
 const viewStats = () => ga.recordEvent( 'Posts', 'Clicked View Post Stats' );
@@ -36,7 +34,7 @@ const getAvailableControls = props => {
 		post,
 		site,
 		translate,
-		viewPost
+		onViewPost
 	} = props;
 	const controls = { main: [], more: [] };
 
@@ -58,7 +56,7 @@ const getAvailableControls = props => {
 		controls.main.push( {
 			className: 'view',
 			icon: 'visible',
-			onClick: viewPost,
+			onClick: onViewPost,
 			text: translate( 'View' ),
 		} );
 
@@ -80,17 +78,10 @@ const getAvailableControls = props => {
 			} );
 		}
 	} else if ( 'trash' !== post.status ) {
-		const parsedUrl = url.parse( post.URL, true );
-		parsedUrl.query.preview = true;
-		// NOTE: search needs to be cleared in order to rebuild query
-		// http://nodejs.org/api/url.html#url_url_format_urlobj
-		parsedUrl.search = '';
-
 		controls.main.push( {
 			className: 'view',
-			href: url.format( parsedUrl ),
-			icon: 'external',
-			onClick: preview,
+			icon: 'visible',
+			onClick: onViewPost,
 			text: translate( 'Preview' ),
 		} );
 
