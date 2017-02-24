@@ -22,11 +22,6 @@ function getHoldMessages( translate ) {
 			description: '',
 			supportUrl: '',
 		},
-		NO_BUSINESS_PLAN: {
-			title: translate( 'Business plan required' ),
-			description: translate( 'This feature is only allowed on sites with a business plan.' ),
-			supportUrl: 'https://support.wordpress.com/'
-		},
 		NO_VIP_SITES: {
 			title: translate( 'VIP site' ),
 			description: translate( 'This feature is not supported on VIP sites.' ),
@@ -40,11 +35,6 @@ function getHoldMessages( translate ) {
 		NON_ADMIN_USER: {
 			title: translate( 'Admin access required' ),
 			description: translate( 'Only site administrators are allowed to use this feature.' ),
-			supportUrl: 'https://support.wordpress.com/'
-		},
-		NOT_USING_CUSTOM_DOMAIN: {
-			title: translate( 'No custom domain' ),
-			description: translate( 'Your site must use a custom domain to use this feature.' ),
 			supportUrl: 'https://support.wordpress.com/'
 		},
 		NOT_DOMAIN_OWNER: {
