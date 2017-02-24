@@ -79,6 +79,26 @@ const posterIsUpdated = ( state = false, action ) => {
 };
 
 /**
+ * Tracks poster URL state.
+ *
+ * @param  {Object} state  Current state
+ * @param  {Object} action Action object
+ * @return {Object}        Updated state
+ */
+const poster = ( state = '', action ) => {
+	switch ( action.type ) {
+		case VIDEO_EDITOR_POSTER_UPDATE_SUCCESS:
+			return action.data.poster;
+
+		case VIDEO_EDITOR_STATE_RESET:
+		case VIDEO_EDITOR_STATE_RESET_POSTER:
+			return '';
+	}
+
+	return state;
+};
+
+/**
  * Tracks poster error state.
  *
  * @param  {Object} state  Current state
@@ -122,6 +142,7 @@ const hasScriptLoadError = ( state = false, action ) => {
 export default combineReducers( {
 	hasPosterUpdateError,
 	hasScriptLoadError,
+	poster,
 	posterIsUpdating,
 	posterIsUpdated,
 	videoIsLoading,
