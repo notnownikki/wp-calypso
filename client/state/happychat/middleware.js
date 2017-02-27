@@ -24,6 +24,7 @@ import wpcom from 'lib/wp';
 import { updateChatMessage } from 'state/happychat/actions';
 import {
 	isHappychatChatActive,
+	isHappychatRecentlyActive,
 	getHappychatConnectionStatus,
 	getHappychatTranscriptTimestamp
 } from 'state/happychat/selectors';
@@ -142,9 +143,11 @@ export default ( store ) => {
 	return next => action => {
 		switch ( action.type ) {
 			case CURRENT_USER_ID_SET:
-				if ( isHappychatChatActive( store.getState() ) ) {
+				const state = store.getState();
+				if ( isHappychatRecentlyActive( state, Date.now() ) && isHappychatChatActive( state ) ) {
 					connectChat( store );
 				}
+				break;
 			case HAPPYCHAT_CONNECTION_OPEN:
 				connectChat( store );
 				break;
