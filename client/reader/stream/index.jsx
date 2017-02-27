@@ -4,48 +4,33 @@
 import ReactDom from 'react-dom';
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import { defer, flatMap, lastIndexOf, noop, times, clamp, includes } from 'lodash';
+import { defer, flatMap, lastIndexOf, noop, times, clamp } from 'lodash';
 import { connect } from 'react-redux';
 
 /**
  * Internal dependencies
  */
 import ReaderMain from 'components/reader-main';
-import DISPLAY_TYPES from 'lib/feed-post-store/display-types';
 import EmptyContent from './empty';
 import * as FeedStreamStoreActions from 'lib/feed-stream-store/actions';
-import ListGap from 'reader/list-gap';
 import LikeStore from 'lib/like-store/like-store';
 import LikeStoreActions from 'lib/like-store/actions';
 import LikeHelper from 'reader/like-helper';
 import InfiniteList from 'components/infinite-list';
 import MobileBackToSidebar from 'components/mobile-back-to-sidebar';
-import CrossPost from './x-post';
-import Post from './post';
 import PostPlaceholder from './post-placeholder';
 import PostStore from 'lib/feed-post-store';
 import UpdateNotice from 'reader/update-notice';
-import PostBlocked from 'blocks/reader-post-card/blocked';
 import KeyboardShortcuts from 'lib/keyboard-shortcuts';
 import scrollTo from 'lib/scroll-to';
 import XPostHelper from 'reader/xpost-helper';
-import RecommendedPosts from './recommended-posts';
 import PostLifecycle from './post-lifecycle';
 import FeedSubscriptionStore from 'lib/reader-feed-subscriptions';
-import { IN_STREAM_RECOMMENDATION } from 'reader/follow-button/follow-sources';
 import { showSelectedPost } from 'reader/utils';
 import getBlockedSites from 'state/selectors/get-blocked-sites';
 
 const GUESSED_POST_HEIGHT = 600;
 const HEADER_OFFSET_TOP = 46;
-
-function cardFactory( post ) {
-	if ( post.display_type & DISPLAY_TYPES.X_POST ) {
-		return CrossPost;
-	}
-
-	return Post;
-}
 
 const MIN_DISTANCE_BETWEEN_RECS = 4; // page size is 7, so one in the middle of every page and one on page boundries, sometimes
 const MAX_DISTANCE_BETWEEN_RECS = 30;
@@ -116,7 +101,6 @@ class ReaderStream extends React.Component {
 		showDefaultEmptyContentIfMissing: PropTypes.bool,
 		showPrimaryFollowButtonOnCards: PropTypes.bool,
 		showMobileBackToSidebar: PropTypes.bool,
-		cardFactory: PropTypes.func,
 		placeholderFactory: PropTypes.func,
 		followSource: PropTypes.string,
 		isDiscoverStream: PropTypes.bool,
@@ -183,20 +167,6 @@ class ReaderStream extends React.Component {
 		if ( this.state.selectedIndex > -1 && history.scrollRestoration !== 'manual' ) {
 			this.scrollToSelectedPost( false );
 		}
-	}
-
-	cardClassForPost = ( post ) => {
-		if ( includes( this.props.blockedSites, +post.site_ID ) ) {
-			return PostBlocked;
-		}
-
-		if ( this.props.cardFactory ) {
-			const externalPostClass = this.props.cardFactory( post );
-			if ( externalPostClass ) {
-				return externalPostClass;
-			}
-		}
-		return cardFactory( post );
 	}
 
 	scrollToSelectedPost( animate ) {
@@ -267,7 +237,6 @@ class ReaderStream extends React.Component {
 	handleOpenSelection = () => {
 		showSelectedPost( {
 			store: this.props.postsStore,
-			selectedGap: this._selectedGap,
 			postKey: this.props.postsStore.getSelectedPost()
 		} );
 	}
@@ -413,31 +382,6 @@ class ReaderStream extends React.Component {
 			)
 		);
 
-		if ( postKey.isGap ) {
-			return (
-				<ListGap
-				ref={ ( c ) => {
-					if ( isSelected ) {
-						this._selectedGap = c;
-					}
-				} }
-				key={ 'gap-' + postKey.from + '-' + postKey.to }
-				gap={ postKey }
-				selected={ isSelected }
-				store={ this.props.postsStore } />
-				);
-		}
-
-		if ( postKey.isRecommendationBlock ) {
-			return <RecommendedPosts
-				recommendations={ postKey.recommendations }
-				index={ postKey.index }
-				storeId={ this.props.recommendationsStore.id }
-				key={ `recs-${ index }` }
-				followSource={ IN_STREAM_RECOMMENDATION }
-				/>;
-		}
-
 		const itemKey = this.getPostRef( postKey );
 		const showPost = ( args ) => showSelectedPost( {
 			...args,
@@ -458,7 +402,6 @@ class ReaderStream extends React.Component {
 			showPrimaryFollowButtonOnCards={ this.props.showPrimaryFollowButtonOnCards }
 			isDiscoverStream={ this.props.isDiscoverStream }
 			showSiteName={ this.props.showSiteNameOnCards }
-			cardClassForPost={ this.cardClassForPost }
 			followSource={ this.props.followSource }
 		/>;
 	}

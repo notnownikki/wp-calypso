@@ -16,30 +16,14 @@ import wpcom from 'lib/wp';
 
 const wpcomUndoc = wpcom.undocumented();
 
-function feedKeyMaker( post ) {
-	return {
-		feedId: post.feed_ID,
-		postId: post.ID
-	};
-}
+const keyMaker = post => ( {
+	blogId: post.site_ID,
+	feedId: post.feed_ID,
+	postId: post.ID || post.feed_item_ID,
+} );
 
-function siteKeyMaker( post ) {
-	return {
-		blogId: post.site_ID,
-		postId: post.ID
-	};
-}
-
-function mixedKeyMaker( post ) {
-	if ( post.feed_ID && post.feed_item_ID ) {
-		return {
-			feedId: post.feed_ID,
-			postId: post.feed_item_ID
-		};
-	}
-
-	return siteKeyMaker( post );
-}
+const recommendedKeyMaker = post =>
+	Object.assign( {}, keyMaker( post ), { isRecommendation: true } );
 
 function addMetaToNextPageFetch( params ) {
 	params.meta = 'post,discover_original_post';
@@ -77,8 +61,8 @@ function getStoreForFeed( storeId ) {
 		};
 	return new FeedStream( {
 		id: storeId,
-		fetcher: fetcher,
-		keyMaker: feedKeyMaker,
+		fetcher,
+		keyMaker,
 		onNextPageFetch: addMetaToNextPageFetch
 	} );
 }
@@ -93,15 +77,15 @@ function getStoreForTag( storeId ) {
 	if ( config.isEnabled( 'reader/tags-with-elasticsearch' ) ) {
 		return new PagedStream( {
 			id: storeId,
-			fetcher: fetcher,
-			keyMaker: siteKeyMaker,
+			fetcher,
+			keyMaker,
 			perPage: 5
 		} );
 	}
 	return new FeedStream( {
 		id: storeId,
-		fetcher: fetcher,
-		keyMaker: mixedKeyMaker,
+		fetcher,
+		keyMaker,
 		onGapFetch: limitSiteParams,
 		onUpdateFetch: limitSiteParams,
 		dateProperty: 'tagged_on'
@@ -112,8 +96,8 @@ function getStoreForSearch( storeId ) {
 	const slug = storeId.substring( storeId.indexOf( ':' ) + 1 );
 	const stream = new PagedStream( {
 		id: storeId,
-		fetcher: fetcher,
-		keyMaker: siteKeyMaker,
+		fetcher,
+		keyMaker,
 		perPage: 5
 	} );
 
@@ -137,8 +121,8 @@ function getStoreForList( storeId ) {
 
 	return new FeedStream( {
 		id: storeId,
-		fetcher: fetcher,
-		keyMaker: mixedKeyMaker,
+		fetcher,
+		keyMaker,
 		onGapFetch: limitSiteParams,
 		onUpdateFetch: limitSiteParams
 	} );
@@ -153,8 +137,8 @@ function getStoreForSite( storeId ) {
 
 	return new FeedStream( {
 		id: storeId,
-		fetcher: fetcher,
-		keyMaker: siteKeyMaker,
+		fetcher,
+		keyMaker,
 		onGapFetch: limitSiteParams,
 		onUpdateFetch: limitSiteParams
 	} );
@@ -168,8 +152,8 @@ function getStoreForFeatured( storeId ) {
 
 	return new FeedStream( {
 		id: storeId,
-		fetcher: fetcher,
-		keyMaker: siteKeyMaker,
+		fetcher,
+		keyMaker,
 		onGapFetch: limitSiteParams,
 		onUpdateFetch: limitSiteParams
 	} );
@@ -179,7 +163,7 @@ function getStoreForRecommendedPosts( storeId ) {
 	const stream = new PagedStream( {
 		id: storeId,
 		fetcher: fetcher,
-		keyMaker: siteKeyMaker,
+		keyMaker: recommendedKeyMaker,
 		perPage: 6,
 	} );
 
@@ -245,21 +229,21 @@ export default function feedStoreFactory( storeId ) {
 		store = new FeedStream( {
 			id: storeId,
 			fetcher: wpcomUndoc.readFollowing.bind( wpcomUndoc ),
-			keyMaker: feedKeyMaker,
+			keyMaker,
 			onNextPageFetch: addMetaToNextPageFetch
 		} );
 	} else if ( storeId === 'a8c' ) {
 		store = new FeedStream( {
 			id: storeId,
 			fetcher: wpcomUndoc.readA8C.bind( wpcomUndoc ),
-			keyMaker: feedKeyMaker,
+			keyMaker,
 			onNextPageFetch: addMetaToNextPageFetch
 		} );
 	} else if ( storeId === 'likes' ) {
 		store = new FeedStream( {
 			id: storeId,
 			fetcher: wpcomUndoc.readLiked.bind( wpcomUndoc ),
-			keyMaker: siteKeyMaker,
+			keyMaker,
 			onGapFetch: limitSiteParamsForLikes,
 			onUpdateFetch: limitSiteParamsForLikes,
 			dateProperty: 'date_liked'
