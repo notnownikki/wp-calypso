@@ -88,7 +88,7 @@ const posterIsUpdated = ( state = false, action ) => {
 const poster = ( state = '', action ) => {
 	switch ( action.type ) {
 		case VIDEO_EDITOR_POSTER_UPDATE_SUCCESS:
-			return action.data.poster;
+			return action.poster;
 
 		case VIDEO_EDITOR_STATE_RESET:
 		case VIDEO_EDITOR_STATE_RESET_POSTER:

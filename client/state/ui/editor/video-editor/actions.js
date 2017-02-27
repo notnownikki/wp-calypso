@@ -70,7 +70,17 @@ export const updateVideoEditorPoster = ( guid, params ) => {
 		dispatch( { type: VIDEO_EDITOR_POSTER_UPDATE } );
 
 		return wpcom.undocumented().updateVideoPoster( guid, params )
-			.then( data => dispatch( { type: VIDEO_EDITOR_POSTER_UPDATE_SUCCESS, data } ) )
-			.catch( error => dispatch( { type: VIDEO_EDITOR_POSTER_UPDATE_FAILURE, error } ) );
+			.then( data =>
+				dispatch( {
+					type: VIDEO_EDITOR_POSTER_UPDATE_SUCCESS,
+					poster: data.poster,
+				} )
+			)
+			.catch( error =>
+				dispatch( {
+					type: VIDEO_EDITOR_POSTER_UPDATE_FAILURE,
+					error
+				} )
+			);
 	};
 };
