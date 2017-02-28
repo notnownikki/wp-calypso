@@ -6,22 +6,34 @@ import { setSection as setSectionMiddlewareFactory } from '../../client/controll
 
 export function serverRouter( expressApp, setUpRoute, section ) {
 	return function( route, ...middlewares ) {
-		expressApp.get(
-			route,
-			setUpRoute,
-			combineMiddlewares(
-				setSectionMiddlewareFactory( section ),
-				...middlewares
-			),
-			serverRender
-		);
+		if ( middlewares.length === 0 ) {
+			// No route def -- the route arg is really a middleware
+			//expressApp.use( route );
+			expressApp.use( ( err, req, res, next ) => {
+				route( req.context, next.bind( null, err ) );
+			} ); //  Need err arg!
+			expressApp.use( ( err, req, res, next ) => { // eslint-disable-line no-unused-vars
+				//res.send( 'Theme 404' )
+				serverRender( req, res );
+			} );
+		} else {
+			expressApp.get(
+				route,
+				setUpRoute,
+				combineMiddlewares(
+					setSectionMiddlewareFactory( section ),
+					...middlewares
+				),
+				serverRender
+			);
+		}
 	};
 }
 
 function combineMiddlewares( ...middlewares ) {
 	return function( req, res, next ) {
 		req.context = getEnhancedContext( req );
-		applyMiddlewares( req.context, ...middlewares, () => {
+		applyMiddlewares( req.context, next, ...middlewares, () => {
 			next();
 		} );
 	};
@@ -39,13 +51,28 @@ function getEnhancedContext( req ) {
 	} );
 }
 
-function applyMiddlewares( context, ...middlewares ) {
-	const liftedMiddlewares = middlewares.map( middleware => next => middleware( context, next ) );
+function applyMiddlewares( context, next, ...middlewares ) {
+	const liftedMiddlewares = middlewares.map( middleware => mwNext => middleware( context, ( err ) => {
+		if ( err ) {
+			next( err ); // Call express' next( err ) for error handling (and bail early from this route)
+		}
+		mwNext();
+	} ) );
 	compose( ...liftedMiddlewares )();
 }
 
 function compose( ...functions ) {
 	return functions.reduceRight( ( composed, f ) => (
-		next => f( composed ) // eslint-disable-line no-unused-vars
+		() => f( composed )
 	), () => {} );
 }
+
+// next => fetchDetails( context, next )
+// next => details( context, next )
+// next => makeLayout( context, next )
+// next => (() => { expressNext(); }) ( context, next ) -- this just invokes the ()=> fn, and hence expresNext, doesn't it.
+
+// compose: start with () => {}
+// () => {}
+
+// When next is called, we normally just call the next fn in line. but we really should check if it's called with an arg.

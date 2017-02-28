@@ -33,6 +33,11 @@ export function fetchThemeDetailsData( context, next ) {
 
 	context.store.dispatch( requestTheme( themeSlug, 'wpcom' ) )
 		.then( () => {
+			const theme = getTheme( context.store.getState(), 'wpcom', themeSlug );
+			if ( ! theme ) {
+				const err = { error: 'Theme Not Found', themeSlug };
+				return next( err );
+			}
 			next();
 		} );
 }
