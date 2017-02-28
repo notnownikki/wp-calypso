@@ -57,8 +57,9 @@ function applyMiddlewares( context, expressNext, ...middlewares ) {
 	const liftedMiddlewares = middlewares.map( middleware => next => middleware( context, ( err ) => {
 		if ( err ) {
 			expressNext( err ); // Call express' next( err ) for error handling (and bail early from this route)
+		} else {
+			next();
 		}
-		next();
 	} ) );
 	compose( ...liftedMiddlewares )();
 }
