@@ -10,7 +10,9 @@ export function serverRouter( expressApp, setUpRoute, section ) {
 			// No route def -- the route arg is really a middleware
 			//expressApp.use( route );
 			expressApp.use( ( err, req, res, next ) => {
-				route( req.context, next.bind( null, err ) );
+				// Careful, page( fn ) is equiv to page( '*', fn )
+				// So let's add a check for no. of args -- 3 (error is first)
+				route( err, req.context, next.bind( null, err ) );
 			} ); //  Need err arg!
 			expressApp.use( ( err, req, res, next ) => { // eslint-disable-line no-unused-vars
 				//res.send( 'Theme 404' )

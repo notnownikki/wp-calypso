@@ -13,7 +13,7 @@ export default function( router ) {
 		// TODO: Add adapter; Make sure client works this way, too. Essentially, we want to bail if not found so the server-rendered stuff is used.
 		// And just not render?
 		// Maybe move to separate PR? (before caching one)
-		router( ( context, next ) => {
+		router( ( err, context, next ) => {
 		//router( ( err, req, res, next ) => {
 			// We need to specify 4 arguments here (including next, although unused) to indicate this is an error handling mw
 			//res.status( 404 );
