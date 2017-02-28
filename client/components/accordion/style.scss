@@ -96,7 +96,8 @@ $accordion-background-expanded: $white;
 
 .accordion__subtitle {
 	font-size: 11px;
-	color: $gray;
+	color: $gray-text-min;
+	font-weight: 400;
 	white-space: nowrap;
 	overflow: hidden;
 	position: relative;
@@ -132,7 +133,7 @@ $accordion-background-expanded: $white;
 }
 
 .accordion__content-wrap {
-	padding: $accordion-padding;
+	padding: 0 $accordion-padding $accordion-padding $accordion-padding;
 }
 
 .accordion__section {
