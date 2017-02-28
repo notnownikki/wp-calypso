@@ -6,7 +6,7 @@ import { setSection as setSectionMiddlewareFactory } from '../../client/controll
 
 export function serverRouter( expressApp, setUpRoute, section ) {
 	return function( route, ...middlewares ) {
-		if ( middlewares.length === 0 ) {
+		if ( typeof route === 'function' && middlewares.length === 0 ) {
 			// No route def -- the route arg is really a middleware
 			//expressApp.use( route );
 			expressApp.use( ( err, req, res, next ) => {
