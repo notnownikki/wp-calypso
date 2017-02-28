@@ -6,14 +6,14 @@ import { setSection as setSectionMiddlewareFactory } from '../../client/controll
 
 export function serverRouter( expressApp, setUpRoute, section ) {
 	return function( route, ...middlewares ) {
-		if ( typeof route === 'function' && middlewares.length === 0 ) {
-			// No route def -- the route arg is really a middleware
+		if ( middlewares.length === 0 && typeof route === 'function' && route.length === 3 ) {
+			// No route def -- the route arg is really an error-handling middleware
 			//expressApp.use( route );
 			expressApp.use( ( err, req, res, next ) => {
 				// Careful, page( fn ) is equiv to page( '*', fn )
 				// So let's add a check for no. of args -- 3 (error is first)
 				route( err, req.context, next );
-			} ); //  Need err arg!
+			} ); // Need err arg!
 			expressApp.use( ( err, req, res, next ) => { // eslint-disable-line no-unused-vars
 				//res.send( 'Theme 404' )
 				serverRender( req, res );
