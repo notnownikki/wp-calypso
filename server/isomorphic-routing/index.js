@@ -35,9 +35,7 @@ export function serverRouter( expressApp, setUpRoute, section ) {
 function combineMiddlewares( ...middlewares ) {
 	return function( req, res, next ) {
 		req.context = getEnhancedContext( req );
-		applyMiddlewares( req.context, next, ...middlewares, () => {
-			next();
-		} );
+		applyMiddlewares( req.context, next, ...middlewares );
 	};
 }
 
@@ -60,7 +58,7 @@ function applyMiddlewares( context, expressNext, ...middlewares ) {
 		}
 		next();
 	} ) );
-	compose( ...liftedMiddlewares )();
+	compose( ...liftedMiddlewares, expressNext )();
 }
 
 function compose( ...functions ) {
