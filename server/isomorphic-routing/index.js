@@ -12,7 +12,7 @@ export function serverRouter( expressApp, setUpRoute, section ) {
 			expressApp.use( ( err, req, res, next ) => {
 				// Careful, page( fn ) is equiv to page( '*', fn )
 				// So let's add a check for no. of args -- 3 (error is first)
-				route( err, req.context, next.bind( null, err ) );
+				route( err, req.context, next );
 			} ); //  Need err arg!
 			expressApp.use( ( err, req, res, next ) => { // eslint-disable-line no-unused-vars
 				//res.send( 'Theme 404' )

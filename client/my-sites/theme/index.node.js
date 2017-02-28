@@ -19,7 +19,7 @@ export default function( router ) {
 			//res.status( 404 );
 			// create error in context.primary. That's req.primary, right?
 			context.layout = <div>dulioe</div>;
-			next();
+			next( err );
 			// Or do we rely on render?
 		} );
 	}
