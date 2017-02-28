@@ -51,12 +51,12 @@ function getEnhancedContext( req ) {
 	} );
 }
 
-function applyMiddlewares( context, next, ...middlewares ) {
-	const liftedMiddlewares = middlewares.map( middleware => mwNext => middleware( context, ( err ) => {
+function applyMiddlewares( context, expressNext, ...middlewares ) {
+	const liftedMiddlewares = middlewares.map( middleware => next => middleware( context, ( err ) => {
 		if ( err ) {
-			next( err ); // Call express' next( err ) for error handling (and bail early from this route)
+			expressNext( err ); // Call express' next( err ) for error handling (and bail early from this route)
 		}
-		mwNext();
+		next();
 	} ) );
 	compose( ...liftedMiddlewares )();
 }
