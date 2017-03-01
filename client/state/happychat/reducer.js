@@ -10,6 +10,7 @@ import {
 	get,
 	takeRight,
 } from 'lodash';
+import validator from 'is-my-json-valid';
 
 /**
  * Internal dependencies
@@ -28,9 +29,8 @@ import {
 	HAPPYCHAT_DISCONNECTED
 } from 'state/action-types';
 
-import {
-	HAPPYCHAT_MAX_STORED_MESSAGES,
-} from './constants';
+import { HAPPYCHAT_MAX_STORED_MESSAGES } from './constants';
+import { timelineSchema } from './schema';
 
 const STATUS_DISCONNECTED = 'disconnected';
 const STATUS_CONNECTED = 'connected';
@@ -63,6 +63,7 @@ const timeline_event = ( state = {}, action ) => {
 	return state;
 };
 
+const validateTimeline = validator( timelineSchema );
 /**
  * Adds timeline events for happychat
  *
@@ -76,7 +77,11 @@ const timeline = ( state = [], action ) => {
 		case SERIALIZE:
 			return takeRight( state, HAPPYCHAT_MAX_STORED_MESSAGES );
 		case DESERIALIZE:
-			return state;
+			const valid = validateTimeline( state );
+			if ( valid ) {
+				return state;
+			}
+			return [];
 		case HAPPYCHAT_RECEIVE_EVENT:
 			const event = timeline_event( {}, action );
 			const existing = find( state, ( { id } ) => event.id === id );
