@@ -246,6 +246,7 @@ export const PostEditor = React.createClass( {
 							/>
 							<div className="post-editor__site">
 								<Site
+									compact
 									site={ site }
 									indicator={ false }
 									homeLink={ true }
