@@ -2,11 +2,14 @@
  * External dependencies
  */
 import { combineReducers } from 'redux';
-import get from 'lodash/get';
-import find from 'lodash/find';
-import concat from 'lodash/concat';
-import filter from 'lodash/filter';
-import map from 'lodash/map';
+import {
+	concat,
+	filter,
+	find,
+	map,
+	get,
+	takeRight,
+} from 'lodash';
 
 /**
  * Internal dependencies
@@ -24,6 +27,10 @@ import {
 	HAPPYCHAT_TRANSCRIPT_RECEIVE,
 	HAPPYCHAT_DISCONNECTED
 } from 'state/action-types';
+
+import {
+	HAPPYCHAT_MAX_STORED_MESSAGES,
+} from './constants';
 
 const STATUS_DISCONNECTED = 'disconnected';
 const STATUS_CONNECTED = 'connected';
@@ -67,7 +74,7 @@ const timeline_event = ( state = {}, action ) => {
 const timeline = ( state = [], action ) => {
 	switch ( action.type ) {
 		case SERIALIZE:
-			return [];
+			return takeRight( state, HAPPYCHAT_MAX_STORED_MESSAGES );
 		case DESERIALIZE:
 			return state;
 		case HAPPYCHAT_RECEIVE_EVENT:

@@ -7,6 +7,7 @@ import { get, head, map } from 'lodash';
  * Internal dependencies
  */
 import createSelector from 'lib/create-selector';
+import { HAPPYCHAT_INACTIVE_TIMEOUT_MS } from './constants';
 
 export const HAPPYCHAT_CHAT_STATUS_DEFAULT = 'default';
 export const HAPPYCHAT_CHAT_STATUS_ASSIGNED = 'assigned';
@@ -14,10 +15,6 @@ export const HAPPYCHAT_CHAT_STATUS_ASSIGNING = 'assigning';
 export const HAPPYCHAT_CHAT_STATUS_PENDING = 'pending';
 export const HAPPYCHAT_CHAT_STATUS_MISSED = 'missed';
 export const HAPPYCHAT_CHAT_STATUS_ABANDONED = 'abandoned';
-
-// If the page is refreshed within the below amount of time after
-// any chat activity, Happychat will automatically reconnect.
-export const HAPPYCHAT_INACTIVE_TIMEOUT_MS = 1000 * 60 * 10;
 
 export const getHappychatChatStatus = createSelector(
 	state => state.happychat.chatStatus
