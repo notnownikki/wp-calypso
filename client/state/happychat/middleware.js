@@ -21,7 +21,7 @@ import {
 	CURRENT_USER_ID_SET
 } from 'state/action-types';
 import wpcom from 'lib/wp';
-import { updateChatMessage } from 'state/happychat/actions';
+import { updateChatMessage, requestTranscript as requestTranscriptAction } from 'state/happychat/actions';
 import {
 	isHappychatChatActive,
 	isHappychatRecentlyActive,
@@ -93,6 +93,7 @@ const connectChat = ( { dispatch, getState } ) => {
 	.on( 'connect', () => {
 		debug( 'set connected!' );
 		dispatch( setChatConnected() );
+		dispatch( requestTranscriptAction() );
 	} )
 	.on( 'reconnect', () => dispatch( setChatConnecting() ) )
 	.on( 'disconnect', () => dispatch( setChatDisconnected() ) )
