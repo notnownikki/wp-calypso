@@ -87,7 +87,8 @@ const JetpackNewSite = React.createClass( {
 						</Card>
 						<Card className="jetpack-new-site__mobile">
 							<div className="jetpack-new-site__mobile-wpcom-site">
-								<Button className="button is-primary" href={ this.getNewWpcomSiteUrl() }>{ this.translate( 'Create a New WordPress.com Site' ) }</Button>
+								<p>{ this.translate( 'Create a new shiny WordPress.com site:' ) }</p>
+								<Button className="button is-primary" href={ this.getNewWpcomSiteUrl() }>{ this.translate( 'Start Now' ) }</Button>
 							</div>
 							<div className="jetpack-new-site__divider">
 								<span>{ this.translate( 'or' ) }</span>
