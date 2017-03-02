@@ -1,18 +1,18 @@
 /**
  * External Dependencies
  */
-const ReactDom = require( 'react-dom' ),
-	React = require( 'react' ),
-	PureRenderMixin = require( 'react-pure-render/mixin' ),
-	classnames = require( 'classnames' ),
-	closest = require( 'component-closest' ),
-	url = require( 'url' );
+import ReactDom from 'react-dom';
+import React from 'react';
+import PureRenderMixin from 'react-pure-render/mixin';
+import classnames from 'classnames';
+import closest from 'component-closest';
+import url from 'url';
 
 /**
  * Internal Dependencies
  */
-const Card = require( 'components/card' ),
-	SiteAndAuthorIcon = require( 'reader/site-and-author-icon' );
+import Card from 'components/card';
+import SiteAndAuthorIcon from 'reader/site-and-author-icon';
 
 const CrossPost = React.createClass( {
 
