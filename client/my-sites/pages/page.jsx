@@ -37,6 +37,7 @@ import { userCan } from 'lib/site/utils';
 import { updateSitesList } from './helpers';
 import { setPreviewUrl } from 'state/ui/preview/actions';
 import { setLayoutFocus } from 'state/ui/layout-focus/actions';
+import { getPreviewURL } from 'lib/posts/utils';
 
 function recordEvent( eventAction ) {
 	analytics.ga.recordEvent( 'Pages', eventAction );
@@ -139,7 +140,8 @@ const Page = React.createClass( {
 
 	viewPage: function( event ) {
 		event.preventDefault();
-		this.props.setPreviewUrl( this.props.page.URL );
+
+		this.props.setPreviewUrl( this.props.previewURL );
 		this.props.setLayoutFocus( 'preview' );
 	},
 
@@ -450,6 +452,7 @@ export default connect(
 			hasStaticFrontPage: hasStaticFrontPage( state, props.page.site_ID ),
 			isFrontPage: isFrontPage( state, props.page.site_ID, props.page.ID ),
 			isPostsPage: isPostsPage( state, props.page.site_ID, props.page.ID ),
+			previewURL: getPreviewURL( props.page )
 		};
 	},
 	( dispatch ) => bindActionCreators( {

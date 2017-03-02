@@ -23,6 +23,7 @@ import analytics from 'lib/analytics';
 import config from 'config';
 import { setPreviewUrl } from 'state/ui/preview/actions';
 import { setLayoutFocus } from 'state/ui/layout-focus/actions';
+import { getPreviewURL } from 'lib/posts/utils';
 
 import Comments from 'blocks/comments';
 import PostShare from './post-share';
@@ -377,7 +378,8 @@ const Post = React.createClass( {
 		}
 
 		event.preventDefault();
-		this.props.setPreviewUrl( this.props.post.URL );
+
+		this.props.setPreviewUrl( this.props.previewURL );
 		this.props.setLayoutFocus( 'preview' );
 	},
 
@@ -427,6 +429,10 @@ const Post = React.createClass( {
 } );
 
 export default connect(
-	null,
+	( state, ownProps ) => {
+		return {
+			previewURL: getPreviewURL( ownProps.post ),
+		};
+	},
 	{ setPreviewUrl, setLayoutFocus }
 )( Post );

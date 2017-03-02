@@ -34,7 +34,7 @@ const getAvailableControls = props => {
 		post,
 		site,
 		translate,
-		onViewPost
+		onViewPost,
 	} = props;
 	const controls = { main: [], more: [] };
 
@@ -210,6 +210,7 @@ PostControls.propTypes = {
 	onShowMore: PropTypes.func.isRequired,
 	onToggleShare: PropTypes.func,
 	onTrash: PropTypes.func,
+	onViewPost: PropTypes.func,
 	post: PropTypes.object.isRequired,
 	site: PropTypes.object,
 	translate: PropTypes.func,
