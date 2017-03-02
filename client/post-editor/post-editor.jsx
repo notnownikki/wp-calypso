@@ -227,6 +227,9 @@ export const PostEditor = React.createClass( {
 					/>
 					<div className="post-editor__content">
 						<div className="editor">
+							<EditorNotice
+								{ ...this.state.notice }
+								onDismissClick={ this.hideNotice } />
 							<EditorActionBar
 								isNew={ this.state.isNew }
 								onPrivatePublish={ this.onPublish }
@@ -248,9 +251,6 @@ export const PostEditor = React.createClass( {
 									type={ this.props.type }
 								/>
 							</div>
-							<EditorNotice
-								{ ...this.state.notice }
-								onDismissClick={ this.hideNotice } />
 							<FeaturedImage
 								site={ site }
 								post={ this.state.post }
