@@ -55,11 +55,6 @@ $green-jetpack:     #8cc258; // RGB 140, 194, 88
 		box-shadow: 0 0 0 1px transparentize( lighten( $gray, 20% ), .5 ),
 		0 1px 2px lighten( $gray, 30% ), 0 7px 18px transparentize( lighten( $gray, 15% ), .5 );
 		transition: transform .25s ease, box-shadow .35s ease, z-index .175s ease;
-
-		.jetpack-new-site__wordpress-logo,
-		.jetpack-new-site__jetpack-logo {
-			transform: scale(0.9);
-		}
 	}
 
 	@include breakpoint( "<660px" ) {
