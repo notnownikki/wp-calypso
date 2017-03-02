@@ -6,8 +6,6 @@
 		content: '';
 		position: absolute;
 			top: 0;
-			right: 0; // needed for IE11
-			bottom: 0; // needed for IE11
 			left: 0;
 		background-color: rgba( $gray-dark, 0.5 );
 		border-radius: 50%;
@@ -22,7 +20,8 @@
 	height: 150px;
 }
 
-.edit-gravatar__spinner {
+.edit-gravatar__spinner,
+.edit-gravatar__spinner.is-fallback.spinner {
 	position: absolute;
 		top: 50%;
 		left: 50%;
