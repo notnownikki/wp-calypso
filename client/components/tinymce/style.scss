@@ -47,15 +47,16 @@
 			border-top-width: 0;
 			border-left-width: 0;
 			border-right-width: 0;
+
+			.focus-sidebar & {
+				width: calc( 100% - ( #{ $sidebar-width-max + 1 } ) );
+				margin: 0;
+			}
 		}
 
 		& > .mce-toolbar-grp > .mce-container-body > .mce-container {
 			padding-left: 1px;
 			padding-right: 1px;
-		}
-
-		.focus-sidebar & {
-			width: calc( 100% - ( #{ $sidebar-width-max + 1 } ) );
 		}
 	}
 }
