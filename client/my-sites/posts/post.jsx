@@ -24,6 +24,7 @@ import config from 'config';
 import { setPreviewUrl } from 'state/ui/preview/actions';
 import { setLayoutFocus } from 'state/ui/layout-focus/actions';
 import { getPreviewURL } from 'lib/posts/utils';
+import { isSitePreviewable } from 'state/sites/selectors';
 
 import Comments from 'blocks/comments';
 import PostShare from './post-share';
@@ -371,15 +372,20 @@ const Post = React.createClass( {
 	},
 
 	viewPost( event ) {
+		event.preventDefault();
+		const { isPreviewable, previewURL } = this.props;
+
 		if ( this.props.post.status && this.props.post.status === 'future' ) {
 			this.analyticsEvents.previewPost;
 		} else {
 			this.analyticsEvents.viewPost;
 		}
 
-		event.preventDefault();
+		if ( ! isPreviewable ) {
+			return window.open( previewURL );
+		}
 
-		this.props.setPreviewUrl( this.props.previewURL );
+		this.props.setPreviewUrl( previewURL );
 		this.props.setLayoutFocus( 'preview' );
 	},
 
@@ -429,9 +435,10 @@ const Post = React.createClass( {
 } );
 
 export default connect(
-	( state, ownProps ) => {
+	( state, props ) => {
 		return {
-			previewURL: getPreviewURL( ownProps.post ),
+			isPreviewable: false !== isSitePreviewable( state, props.post.site_ID ),
+			previewURL: getPreviewURL( props.post ),
 		};
 	},
 	{ setPreviewUrl, setLayoutFocus }
