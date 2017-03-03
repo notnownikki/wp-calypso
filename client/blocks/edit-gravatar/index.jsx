@@ -155,17 +155,6 @@ export class EditGravatar extends Component {
 		}
 	}
 
-	renderInstructionText() {
-		return (
-			<div className="edit-gravatar__label-container">
-				<Gridicon icon="cloud-upload" size={ 36 } />
-				<span className="edit-gravatar__label">
-					{ this.props.translate( 'Click to change photo' ) }
-				</span>
-			</div>
-		);
-	}
-
 	render() {
 		const {
 			isUploading,
@@ -187,7 +176,14 @@ export class EditGravatar extends Component {
 							size={ 150 }
 							user={ user }
 						/>
-						{ ! isUploading && this.renderInstructionText() }
+						{ ! isUploading && (
+							<div className="edit-gravatar__label-container">
+								<Gridicon icon="cloud-upload" size={ 36 } />
+								<span className="edit-gravatar__label">
+									{ this.props.translate( 'Click to change photo' ) }
+								</span>
+							</div>
+						) }
 						{ isUploading && <Spinner className="edit-gravatar__spinner" /> }
 						</div>
 				</FilePicker>
