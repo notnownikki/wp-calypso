@@ -15,6 +15,7 @@ import { isEnabled } from 'config';
 import { ga } from 'lib/analytics';
 import { userCan } from 'lib/posts/utils';
 import { isPublicizeEnabled } from 'state/selectors';
+import { isSitePreviewable } from 'state/sites/selectors';
 
 const edit = () => ga.recordEvent( 'Posts', 'Clicked Edit Post' );
 const copy = () => ga.recordEvent( 'Posts', 'Clicked Copy Post' );
@@ -56,7 +57,7 @@ const getAvailableControls = props => {
 		controls.main.push( {
 			className: 'view',
 			href: post.URL,
-			icon: 'visible',
+			icon: props.isPreviewable ? 'visible' : 'external',
 			onClick: onViewPost,
 			text: translate( 'View' ),
 		} );
@@ -81,7 +82,7 @@ const getAvailableControls = props => {
 	} else if ( 'trash' !== post.status ) {
 		controls.main.push( {
 			className: 'view',
-			icon: 'visible',
+			icon: props.isPreviewable ? 'visible' : 'external',
 			onClick: onViewPost,
 			text: translate( 'Preview' ),
 		} );
@@ -204,6 +205,7 @@ PostControls.propTypes = {
 	editURL: PropTypes.string.isRequired,
 	fullWidth: PropTypes.bool,
 	isPublicizeEnabled: PropTypes.bool,
+	isPreviewable: PropTypes.bool,
 	onDelete: PropTypes.func,
 	onHideMore: PropTypes.func.isRequired,
 	onPublish: PropTypes.func,
@@ -218,5 +220,6 @@ PostControls.propTypes = {
 };
 
 export default connect( ( state, { site, post } ) => ( {
+	isPreviewable: false !== isSitePreviewable( state, site.ID ),
 	isPublicizeEnabled: isPublicizeEnabled( state, site.ID, post.type ),
 } ) )( localize( PostControls ) );

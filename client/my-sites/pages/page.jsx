@@ -155,6 +155,7 @@ const Page = React.createClass( {
 	},
 
 	getViewItem: function() {
+		const { isPreviewable } = this.props;
 		if ( this.props.page.status === 'trash' ) {
 			return null;
 		}
@@ -166,7 +167,7 @@ const Page = React.createClass( {
 		if ( this.props.page.status !== 'publish' ) {
 			return (
 				<PopoverMenuItem onClick={ this.viewPage }>
-					<Gridicon icon="visible" size={ 18 } />
+					<Gridicon icon={ isPreviewable ? 'visible' : 'external' } size={ 18 } />
 					{ this.translate( 'Preview' ) }
 				</PopoverMenuItem>
 			);
@@ -174,7 +175,7 @@ const Page = React.createClass( {
 
 		return (
 			<PopoverMenuItem onClick={ this.viewPage }>
-				<Gridicon icon="visible" size={ 18 } />
+				<Gridicon icon={ isPreviewable ? 'visible' : 'external' } size={ 18 } />
 				{ this.translate( 'View Page' ) }
 			</PopoverMenuItem>
 		);
