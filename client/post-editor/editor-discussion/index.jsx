@@ -41,10 +41,13 @@ export default React.createClass( {
 			return this.props.post.discussion;
 		}
 
-		if ( this.props.site && this.props.isNew ) {
+		if ( this.props.site && this.props.isNew && this.props.post ) {
+			const { default_comment_status, default_ping_status } = this.props.site.options;
+			const isPage = this.props.post.type === 'page';
+
 			return {
-				comment_status: booleanToStatus( this.props.site.options.default_comment_status ),
-				ping_status: booleanToStatus( this.props.site.options.default_ping_status )
+				comment_status: isPage ? 'closed' : booleanToStatus( default_comment_status ),
+				ping_status: isPage ? 'closed' : booleanToStatus( default_ping_status )
 			};
 		}
 
