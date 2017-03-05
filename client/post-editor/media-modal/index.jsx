@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { localize } from 'i18n-calypso';
 
 import { connect } from 'react-redux';
@@ -44,18 +44,18 @@ import { withAnalytics, bumpStat, recordGoogleEvent } from 'state/analytics/acti
 
 export class EditorMediaModal extends Component {
 	static propTypes = {
-		visible: React.PropTypes.bool,
-		mediaLibrarySelectedItems: React.PropTypes.arrayOf( React.PropTypes.object ),
-		onClose: React.PropTypes.func,
-		site: React.PropTypes.object,
-		siteId: React.PropTypes.number,
-		labels: React.PropTypes.object,
-		single: React.PropTypes.bool,
-		defaultFilter: React.PropTypes.string,
-		enabledFilters: React.PropTypes.arrayOf( React.PropTypes.string ),
-		view: React.PropTypes.oneOf( values( ModalViews ) ),
-		setView: React.PropTypes.func,
-		resetView: React.PropTypes.func
+		visible: PropTypes.bool,
+		mediaLibrarySelectedItems: PropTypes.arrayOf( PropTypes.object ),
+		onClose: PropTypes.func,
+		site: PropTypes.object,
+		siteId: PropTypes.number,
+		labels: PropTypes.object,
+		single: PropTypes.bool,
+		defaultFilter: PropTypes.string,
+		enabledFilters: PropTypes.arrayOf( PropTypes.string ),
+		view: PropTypes.oneOf( values( ModalViews ) ),
+		setView: PropTypes.func,
+		resetView: PropTypes.func
 	};
 
 	static defaultProps = {
@@ -148,14 +148,18 @@ export class EditorMediaModal extends Component {
 	}
 
 	confirmDeleteMedia = accepted => {
-		const { site, mediaLibrarySelectedItems } = this.props;
+		const {
+			mediaLibrarySelectedItems,
+			site,
+			view,
+		} = this.props;
 
 		if ( ! site || ! accepted ) {
 			return;
 		}
 
 		let toDelete = mediaLibrarySelectedItems;
-		if ( ModalViews.DETAIL === this.props.view ) {
+		if ( ModalViews.DETAIL === view ) {
 			toDelete = toDelete[ this.getDetailSelectedIndex() ];
 			this.setNextAvailableDetailView();
 		}
@@ -205,7 +209,6 @@ export class EditorMediaModal extends Component {
 	onImageEditorDone = ( error, blob, imageEditorProps ) => {
 		if ( error ) {
 			this.onImageEditorCancel( imageEditorProps );
-
 			return;
 		}
 
@@ -323,32 +326,44 @@ export class EditorMediaModal extends Component {
 	}
 
 	getModalButtons() {
-		if ( ModalViews.IMAGE_EDITOR === this.props.view ) {
+		const {
+			labels,
+			mediaLibrarySelectedItems,
+			setView,
+			site,
+			translate,
+			view,
+		} = this.props;
+
+		if ( ModalViews.IMAGE_EDITOR === view ) {
 			return;
 		}
 
 		const isDisabled = this.isDisabled();
-		const selectedItems = this.props.mediaLibrarySelectedItems;
+		const selectedItems = mediaLibrarySelectedItems;
 		const buttons = [
 			{
 				action: 'cancel',
-				label: this.props.translate( 'Cancel' )
+				label: translate( 'Cancel' )
 			}
 		];
 
-		if ( ModalViews.GALLERY !== this.props.view && selectedItems.length > 1 &&
-				! some( selectedItems, ( item ) => MediaUtils.getMimePrefix( item ) !== 'image' ) ) {
+		if (
+			ModalViews.GALLERY !== view &&
+			selectedItems.length > 1 &&
+			! some( selectedItems, ( item ) => MediaUtils.getMimePrefix( item ) !== 'image' )
+		) {
 			buttons.push( {
 				action: 'confirm',
-				label: this.props.translate( 'Continue' ),
+				label: translate( 'Continue' ),
 				isPrimary: true,
-				disabled: isDisabled || ! this.props.site,
-				onClick: partial( this.props.setView, ModalViews.GALLERY )
+				disabled: isDisabled || ! site,
+				onClick: partial( setView, ModalViews.GALLERY )
 			} );
 		} else {
 			buttons.push( {
 				action: 'confirm',
-				label: this.props.labels.confirm || this.props.translate( 'Insert' ),
+				label: labels.confirm || translate( 'Insert' ),
 				isPrimary: true,
 				disabled: isDisabled || 0 === selectedItems.length,
 				onClick: this.confirmSelection
