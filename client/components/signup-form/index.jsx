@@ -457,7 +457,7 @@ export default React.createClass( {
 		if ( this.props.social ) {
 			return (
 				<div className="facebook-login-wrapper">
-					<FacebookLogin socialId="128657717165343"
+					<FacebookLogin socialId="10154498991051491"
 						language="en_US"
 						scope="public_profile,email,manage_pages"
 						responseHandler={ this.responseFacebook }
