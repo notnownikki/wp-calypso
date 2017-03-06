@@ -116,6 +116,17 @@ export default React.createClass( {
 		resetAllImageEditorState();
 		this.setState( { currentDetail: null, editedItem: null, selectedImages: [] } );
 	},
+
+	getModalButtons() {
+		return [ {
+			action: 'confirm',
+			label: 'PIPO',
+			isPrimary: true,
+			disabled: false,
+			// onClick: partial( setView, ModalViews.GALLERY )
+		} ];
+	},
+
 	restoreOriginalMedia: function( siteId, item ) {
 		if ( ! siteId || ! item ) {
 			return;
@@ -156,6 +167,7 @@ export default React.createClass( {
 					<Dialog
 						isVisible={ true }
 						additionalClassNames="editor-media-modal"
+						buttons={ this.getModalButtons() }
 						onClose={ this.closeDetailsModal }
 					>
 					{ this.state.currentDetail !== null &&
