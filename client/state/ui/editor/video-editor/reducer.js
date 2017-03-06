@@ -23,7 +23,7 @@ import {
  * @param  {Object} action Action object
  * @return {Object}        Updated state
  */
-const videoIsLoading = ( state = true, action ) => {
+export const videoIsLoading = ( state = true, action ) => {
 	switch ( action.type ) {
 		case VIDEO_EDITOR_VIDEO_HAS_LOADED:
 			return false;
@@ -42,7 +42,7 @@ const videoIsLoading = ( state = true, action ) => {
  * @param  {Object} action Action object
  * @return {Object}        Updated state
  */
-const posterIsUpdating = ( state = false, action ) => {
+export const posterIsUpdating = ( state = false, action ) => {
 	switch ( action.type ) {
 		case VIDEO_EDITOR_POSTER_UPDATE:
 			return true;
@@ -64,7 +64,7 @@ const posterIsUpdating = ( state = false, action ) => {
  * @param  {Object} action Action object
  * @return {Object}        Updated state
  */
-const posterIsUpdated = ( state = false, action ) => {
+export const posterIsUpdated = ( state = false, action ) => {
 	switch ( action.type ) {
 		case VIDEO_EDITOR_POSTER_UPDATE_SUCCESS:
 		case VIDEO_EDITOR_POSTER_UPDATE_FAILURE:
@@ -85,7 +85,7 @@ const posterIsUpdated = ( state = false, action ) => {
  * @param  {Object} action Action object
  * @return {Object}        Updated state
  */
-const poster = ( state = '', action ) => {
+export const poster = ( state = '', action ) => {
 	switch ( action.type ) {
 		case VIDEO_EDITOR_POSTER_UPDATE_SUCCESS:
 			return action.poster;
@@ -105,16 +105,16 @@ const poster = ( state = '', action ) => {
  * @param  {Object} action Action object
  * @return {Object}        Updated state
  */
-const hasPosterUpdateError = ( state = false, action ) => {
+export const hasPosterUpdateError = ( state = false, action ) => {
 	switch ( action.type ) {
+		case VIDEO_EDITOR_POSTER_UPDATE_FAILURE:
+			return true;
+
 		case VIDEO_EDITOR_POSTER_UPDATE:
 		case VIDEO_EDITOR_POSTER_UPDATE_SUCCESS:
 		case VIDEO_EDITOR_STATE_RESET:
 		case VIDEO_EDITOR_STATE_RESET_POSTER:
 			return false;
-
-		case VIDEO_EDITOR_POSTER_UPDATE_FAILURE:
-			return true;
 	}
 
 	return state;
@@ -127,7 +127,7 @@ const hasPosterUpdateError = ( state = false, action ) => {
  * @param  {Object} action Action object
  * @return {Object}        Updated state
  */
-const hasScriptLoadError = ( state = false, action ) => {
+export const hasScriptLoadError = ( state = false, action ) => {
 	switch ( action.type ) {
 		case VIDEO_EDITOR_SCRIPT_LOAD_ERROR:
 			return true;
