@@ -97,7 +97,7 @@ describe( 'actions', () => {
 				],
 				siteId: 'wpcom',
 				query: {},
-				found: 1,
+				found: undefined,
 			} );
 		} );
 	} );

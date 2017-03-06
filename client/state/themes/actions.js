@@ -99,58 +99,41 @@ export function receiveTheme( theme, siteId ) {
  *
  * @param {Array}  themes Themes received
  * @param {number} siteId ID of site for which themes have been received
- * @param {Object} query Theme query used in the API request
- * @param {number} foundCount Number of themes returned by the query
+ * @param {?Object} query Theme query used in the API request
+ * @param {?number} foundCount Number of themes returned by the query
  * @return {Object} Action object
  */
 export function receiveThemes( themes, siteId, query = {}, foundCount ) {
 	return ( dispatch, getState ) => {
-		const filterWpcom = shouldFilterWpcomThemes( getState(), siteId );
-		const { filteredThemes, found } = filterThemes(
-			themes,
-			siteId,
-			filterWpcom,
-			query,
-			foundCount,
-		);
+		let filteredThemes = themes;
+		let found = foundCount;
+
+		if ( siteId !== 'wporg' && siteId !== 'wpcom' ) {
+			/*
+			 * We need to do client-side filtering for Jetpack sites because:
+			 * 1) Jetpack theme API does not support search queries
+			 * 2) We need to filter out all wpcom themes to show an 'Uploaded' list
+			 */
+			const filterWpcom = shouldFilterWpcomThemes( getState(), siteId );
+			filteredThemes = filter(
+				themes,
+				theme => (
+					isThemeMatchingQuery( query, theme ) &&
+						! ( filterWpcom && isThemeFromWpcom( theme.id ) )
+				)
+			);
+			// Jetpack API returns all themes in one response (no paging)
+			found = filteredThemes.length;
+		}
 
 		dispatch( {
 			type: THEMES_REQUEST_SUCCESS,
 			themes: filteredThemes,
 			siteId,
 			query,
-			found: found,
+			found,
 		} );
 	};
-}
-
-/**
- * Remove themes from a list. We need to do some client-side filtering
- * because:
- * 1) Jetpack theme API does not support search queries
- * 2) We need to filter out all wpcom themes to show an 'Uploaded' list
- *
- * @param {Array} themes list of themes to filter
- * @param {number} siteId the Site ID
- * @param {boolean} filterWpcom True to remove all wpcom themes
- * @param {Object} query the theme query
- * @param {number} found total number of themes matching query
- * @returns {Object} contains fields filteredThemes and found
- */
-function filterThemes( themes, siteId, filterWpcom, query, found ) {
-	if ( siteId === 'wporg' || siteId === 'wpcom' ) {
-		return { filteredThemes: themes, found };
-	}
-	const filteredThemes = filter(
-		themes,
-		theme => (
-			isThemeMatchingQuery( query, theme ) &&
-			! ( filterWpcom && isThemeFromWpcom( theme.id ) )
-		)
-	);
-
-	found = filteredThemes.length;
-	return { filteredThemes, found };
 }
 
 /**
