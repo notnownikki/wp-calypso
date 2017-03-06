@@ -64,6 +64,16 @@ module.exports = {
 		providesDependencies: [ 'bearer_token', 'username' ]
 	},
 
+	'user-social': {
+		stepName: 'user',
+		apiRequestFunction: stepActions.createAccount,
+		props: {
+			social: true
+		},
+		providesToken: true,
+		providesDependencies: [ 'bearer_token', 'username' ]
+	},
+
 	'site-title': {
 		stepName: 'site-title',
 		providesDependencies: [ 'siteTitle' ]

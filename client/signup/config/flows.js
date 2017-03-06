@@ -213,6 +213,14 @@ const flows = {
 		description: 'User-first signup flow',
 		lastModified: '2016-01-18',
 	},
+
+	social: {
+		steps: [ 'user-social', 'design-type', 'themes', 'domains', 'plans' ],
+		destination: getSiteDestination,
+		description: 'User-first signup flow',
+		lastModified: '2016-01-18',
+	}
+
 };
 
 if ( config.isEnabled( 'signup/domain-first-flow' ) ) {

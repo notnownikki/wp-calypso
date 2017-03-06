@@ -146,6 +146,7 @@ export class UserStep extends Component {
 				disabled={ this.userCreationStarted() }
 				submitting={ this.userCreationStarted() }
 				save={ this.save }
+				social={ this.props.social }
 				submitForm={ this.submitForm }
 				submitButtonText={ this.submitButtonText() }
 				suggestedUsername={ this.props.suggestedUsername }

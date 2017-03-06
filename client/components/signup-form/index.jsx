@@ -27,6 +27,8 @@ import LoggedOutFormLinks from 'components/logged-out-form/links';
 import LoggedOutFormLinkItem from 'components/logged-out-form/link-item';
 import LoggedOutFormFooter from 'components/logged-out-form/footer';
 import { mergeFormWithValue } from 'signup/utils';
+let FB;
+import { FacebookLogin } from 'react-facebook-login-component';
 
 const VALIDATION_DELAY_AFTER_FIELD_CHANGES = 1500,
 	debug = debugModule( 'calypso:signup-form:form' );
@@ -405,6 +407,7 @@ export default React.createClass( {
 				<FormButton className="signup-form__submit" disabled={ this.state.submitting || this.props.disabled }>
 					{ this.props.submitButtonText }
 				</FormButton>
+				{ this.socialConnect() }
 			</LoggedOutFormFooter>
 		);
 	},
@@ -436,6 +439,37 @@ export default React.createClass( {
 				</LoggedOutFormLinkItem>
 			</LoggedOutFormLinks>
 		);
+	},
+
+
+	responseFacebook (response) {
+		//anything else you want to do(save to localStorage)...
+		FB.api('/me', { access_token: response.accessToken, fields: 'id,email,name,first_name,last_name,name,token_for_business' }, function() {
+			//console.log( response2 );
+		} );
+
+		FB.api('/me/accounts', { access_token: response.accessToken }, function() {
+			//console.log( response3 );
+		} );
+	},
+
+	socialConnect() {
+		if ( this.props.social ) {
+			return (
+				<div className="facebook-login-wrapper">
+					<FacebookLogin socialId="128657717165343"
+						language="en_US"
+						scope="public_profile,email,manage_pages"
+						responseHandler={ this.responseFacebook }
+						xfbml={true}
+						version="v2.5"
+						class="facebook-login"
+						buttonText="Sign up with Facebook"/>
+				</div>
+			);
+		}
+
+		return null;
 	},
 
 	render() {

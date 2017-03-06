@@ -15,7 +15,6 @@ var config = require( 'config' ),
 import UserSignupComponent from 'signup/steps/user';
 import PlansStepWithoutFreePlan from 'signup/steps/plans-without-free';
 
-
 module.exports = {
 	'design-type': DesignTypeComponent,
 	'design-type-with-store': DesignTypeWithStoreComponent,
@@ -35,5 +34,6 @@ module.exports = {
 	test: config( 'env' ) === 'development' ? require( 'signup/steps/test-step' ) : undefined,
 	themes: ThemeSelectionComponent,
 	'themes-site-selected': ThemeSelectionComponent,
-	user: UserSignupComponent
+	user: UserSignupComponent,
+	'user-social': UserSignupComponent
 };
