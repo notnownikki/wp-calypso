@@ -19,6 +19,7 @@ import GeneralSettings from './section-general';
 import WritingSettings from './form-writing';
 import DiscussionSettings from './form-discussion';
 import AnalyticsSettings from './form-analytics';
+import TrafficSettings from './section-traffic';
 import ImportSettings from './section-import';
 import ExportSettings from './section-export';
 import GuidedTransfer from 'my-sites/guided-transfer';
@@ -64,8 +65,8 @@ export class SiteSettingsComponent extends Component {
 			writing: i18n.translate( 'Writing', { context: 'settings screen' } ),
 			discussion: i18n.translate( 'Discussion', { context: 'settings screen' } ),
 			analytics: i18n.translate( 'Analytics', { context: 'settings screen' } ),
+			traffic: i18n.translate( 'Traffic', { context: 'settings screen' } ),
 			security: i18n.translate( 'Security', { context: 'settings screen' } ),
-			seo: i18n.translate( 'SEO', { context: 'settings screen' } ),
 			'import': i18n.translate( 'Import', { context: 'settings screen' } ),
 			'export': i18n.translate( 'Export', { context: 'settings screen' } ),
 		};
@@ -73,7 +74,7 @@ export class SiteSettingsComponent extends Component {
 
 	getSection() {
 		const { site } = this.state;
-		const { section, hostSlug } = this.props;
+		const { section, hostSlug, sites, upgradeToBusiness } = this.props;
 
 		switch ( section ) {
 			case 'general':
@@ -88,6 +89,8 @@ export class SiteSettingsComponent extends Component {
 				return <SiteSecurity site={ site } />;
 			case 'analytics':
 				return <AnalyticsSettings />;
+			case 'traffic':
+				return <TrafficSettings sites={ sites } upgradeToBusiness={ upgradeToBusiness } />;
 			case 'import':
 				return <ImportSettings site={ site } />;
 			case 'export':
