@@ -40,7 +40,6 @@ import {
 	THEME_UPLOAD_FAILURE,
 	THEME_UPLOAD_CLEAR,
 	THEME_UPLOAD_PROGRESS,
-	THEMES_RECEIVE,
 	THEMES_REQUEST,
 	THEMES_REQUEST_SUCCESS,
 	THEMES_REQUEST_FAILURE,
@@ -95,27 +94,6 @@ export function receiveTheme( theme, siteId ) {
 }
 
 /**
- * Returns an action object to be used in signalling that theme objects have
- * been received.
- *
- * @param  {Array}  themes Themes received
- * @param  {Number} siteId ID of site for which themes have been received
- * @return {Object}        Action object
- */
-export function receiveThemes( themes, siteId ) {
-	return ( dispatch, getState ) => {
-		const filterWpcom = shouldFilterWpcomThemes( getState(), siteId );
-		const { filteredThemes } = filterThemes( themes, siteId, filterWpcom );
-
-		dispatch( {
-			type: THEMES_RECEIVE,
-			themes: filteredThemes,
-			siteId
-		} );
-	};
-}
-
-/**
  * Returns an action object to be used in signalling that theme objects from
  * a query have been received.
  *
@@ -125,7 +103,7 @@ export function receiveThemes( themes, siteId ) {
  * @param {number} foundCount Number of themes returned by the query
  * @return {Object} Action object
  */
-export function receiveThemesQuery( themes, siteId, query, foundCount ) {
+export function receiveThemes( themes, siteId, query = {}, foundCount ) {
 	return ( dispatch, getState ) => {
 		const filterWpcom = shouldFilterWpcomThemes( getState(), siteId );
 		const { filteredThemes, found } = filterThemes(
@@ -236,7 +214,7 @@ export function requestThemes( siteId, query = {} ) {
 				dispatch( trackShowcaseSearch );
 			}
 
-			dispatch( receiveThemesQuery( themes, siteId, query, found ) );
+			dispatch( receiveThemes( themes, siteId, query, found ) );
 		} ).catch( ( error ) => {
 			dispatch( {
 				type: THEMES_REQUEST_FAILURE,
