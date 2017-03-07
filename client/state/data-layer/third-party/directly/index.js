@@ -17,11 +17,11 @@ export function askQuestion( store, action, next ) {
 }
 
 export function initialize( { dispatch }, action, next ) {
-	directly.initialize().then(
-		() => dispatch( initializationCompleted() ),
-		() => dispatch( initializationFailed() )
-	);
 	next( action );
+
+	return directly.initialize()
+		.then( () => dispatch( initializationCompleted() ) )
+		.catch( () => dispatch( initializationFailed() ) );
 }
 
 export default {

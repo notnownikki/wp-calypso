@@ -77,25 +77,18 @@ describe( 'Directly data layer', () => {
 		} );
 
 		it( 'should dispatch a success action if initialization completes', ( done ) => {
-			initialize( store, action, next );
-
-			directly.initialize().then( () => {
-				expect( store.dispatch ).to.have.been.calledWith( { type: DIRECTLY_INITIALIZATION_SUCCESS } );
-				done();
-			} );
+			initialize( store, action, next )
+				.then( () => expect( store.dispatch ).to.have.been.calledWith( { type: DIRECTLY_INITIALIZATION_SUCCESS } ) )
+				.then( () => done() );
 
 			simulateInitializationSuccess();
 		} );
 
 		it( 'should dispatch an error action if initialization fails', ( done ) => {
-			initialize( store, action, next );
+			initialize( store, action, next )
+				.then( () => expect( store.dispatch ).to.have.been.calledWith( { type: DIRECTLY_INITIALIZATION_ERROR } ) )
+				.then( done() );
 
-			directly.initialize().catch(
-				() => {
-					expect( store.dispatch ).to.have.been.calledWith( { type: DIRECTLY_INITIALIZATION_ERROR } );
-					done();
-				}
-			);
 			simulateInitializationError();
 		} );
 	} );
