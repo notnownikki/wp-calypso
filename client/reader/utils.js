@@ -126,7 +126,7 @@ export function showFullXPost( xMetadata ) {
 export function showFullPost( { postKey, replaceHistory, comments, post } ) {
 	const hashtag = comments ? '#comments' : '';
 	let query = '';
-	if ( post.referral ) {
+	if ( post && post.referral ) {
 		const { blogId, postId } = post.referral;
 		query += `ref_blog=${ blogId }&ref_post=${ postId }`;
 	}
