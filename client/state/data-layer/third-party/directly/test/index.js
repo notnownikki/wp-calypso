@@ -36,7 +36,7 @@ describe( 'Directly data layer', () => {
 	} );
 
 	beforeEach( () => {
-		// Mock out a Promise that can be resolved or rejected in each tests to similate
+		// Mock out a Promise that can be resolved or rejected in each test to simulate
 		// Directly's library initializing or having an error
 		directly.initialize.returns(
 			new Promise( ( resolve, reject ) => {
@@ -90,14 +90,12 @@ describe( 'Directly data layer', () => {
 		it( 'should dispatch an error action if initialization fails', ( done ) => {
 			initialize( store, action, next );
 
-			directly.initialize().then(
-				() => {},
+			directly.initialize().catch(
 				() => {
 					expect( store.dispatch ).to.have.been.calledWith( { type: DIRECTLY_INITIALIZATION_ERROR } );
 					done();
 				}
 			);
-
 			simulateInitializationError();
 		} );
 	} );

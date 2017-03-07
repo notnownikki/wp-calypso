@@ -38,8 +38,10 @@ import { connectChat as connectHappychat, sendChatMessage as sendHappychatMessag
 import { openChat as openHappychat } from 'state/ui/happychat/actions';
 import { getCurrentUser, getCurrentUserLocale } from 'state/current-user/selectors';
 import { askQuestion as askDirectlyQuestion, initialize as initializeDirectly } from 'state/help/directly/actions';
-import { STATUS_READY as DIRECTLY_STATUS_READY, STATUS_ERROR as DIRECTLY_STATUS_ERROR } from 'state/help/directly/constants';
-import getDirectlyStatus from 'state/selectors/get-directly-status';
+import {
+	isDirectlyFailed,
+	isDirectlyReady,
+} from 'state/selectors';
 
 /**
  * Module variables
@@ -441,7 +443,7 @@ const HelpContact = React.createClass( {
 		return (
 			config.isEnabled( 'help/directly' ) &&
 			isEn &&
-			this.props.directlyStatus !== DIRECTLY_STATUS_ERROR
+			! this.props.isDirectlyFailed
 		);
 	},
 
@@ -587,7 +589,7 @@ const HelpContact = React.createClass( {
 		const olarkReadyOrTimedOut = olark.isOlarkReady || this.props.olarkTimedOut;
 		const ticketReadyOrError = ticketSupportConfigurationReady || null != ticketSupportRequestError;
 
-		const waitingOnDirectly = this.shouldUseDirectly() && this.props.directlyStatus !== DIRECTLY_STATUS_READY;
+		const waitingOnDirectly = this.shouldUseDirectly() && ! this.props.isDirectlyReady;
 
 		return ! sitesInitialized || ! ticketReadyOrError || ! olarkReadyOrTimedOut || waitingOnDirectly;
 	},
@@ -671,7 +673,8 @@ export default connect(
 		return {
 			currentUserLocale: getCurrentUserLocale( state ),
 			currentUser: getCurrentUser( state ),
-			directlyStatus: getDirectlyStatus( state ),
+			isDirectlyFailed: isDirectlyFailed( state ),
+			isDirectlyReady: isDirectlyReady( state ),
 			olarkTimedOut: isOlarkTimedOut( state ),
 			isEmailVerified: isCurrentUserEmailVerified( state ),
 			isHappychatAvailable: isHappychatAvailable( state ),
