@@ -16,14 +16,15 @@ import wpcom from 'lib/wp';
 
 const wpcomUndoc = wpcom.undocumented();
 
+// by throwing out blogId if feed_item_ID exist then we know if its a feed/blog from here on out
 const keyMaker = post => ( {
-	blogId: post.site_ID,
-	feedId: post.feed_ID,
-	postId: post.ID || post.feed_item_ID,
+	blogId: ! post.feed_item_ID && post.site_ID,
+	postId: post.ID, // sometimes for a feed, sometimes a blog
+	feedId: post.feed_ID, // always a feed
+	feedItemId: post.feed_item_ID, // always a feed
 } );
 
-const recommendedKeyMaker = post =>
-	Object.assign( {}, keyMaker( post ), { isRecommendation: true } );
+const recommendedKeyMaker = post => ( { ...keyMaker( post ), isRecommendation: true } );
 
 function addMetaToNextPageFetch( params ) {
 	params.meta = 'post,discover_original_post';
