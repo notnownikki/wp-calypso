@@ -21,7 +21,7 @@ import {
 	CURRENT_USER_ID_SET
 } from 'state/action-types';
 import wpcom from 'lib/wp';
-import { updateChatMessage, requestTranscript as requestTranscriptAction } from 'state/happychat/actions';
+import { updateChatMessage } from 'state/happychat/actions';
 import {
 	isHappychatChatActive,
 	isHappychatRecentlyActive,
@@ -93,7 +93,6 @@ const connectChat = ( { dispatch, getState } ) => {
 	.on( 'connect', () => {
 		debug( 'set connected!' );
 		dispatch( setChatConnected() );
-		dispatch( requestTranscriptAction() );
 	} )
 	.on( 'reconnect', () => dispatch( setChatConnecting() ) )
 	.on( 'disconnect', () => dispatch( setChatDisconnected() ) )
@@ -146,15 +145,22 @@ const requestTranscript = ( { getState, dispatch } ) => {
 
 export default ( store ) => {
 	return next => action => {
+		const state = store.getState();
 		switch ( action.type ) {
 			case CURRENT_USER_ID_SET:
-				const state = store.getState();
 				if ( isHappychatRecentlyActive( state, Date.now() ) && isHappychatChatActive( state ) ) {
 					connectChat( store );
 				}
 				break;
 			case HAPPYCHAT_CONNECTION_OPEN:
 				connectChat( store );
+				break;
+			case HAPPYCHAT_CONNECTED:
+				// This action is dispatched twice when socket.io connects, so
+				// here we check that the status is actually changing.
+				if ( getHappychatConnectionStatus( state ) !== 'connected' ) {
+					requestTranscript( store );
+				}
 				break;
 			case HAPPYCHAT_SET_MESSAGE:
 				onMessageChange( store, action.message );
