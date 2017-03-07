@@ -13,6 +13,18 @@
 	@include breakpoint( ">480px" ) {
 		margin-top: 28px;
 	}
+
+	&.is-free-plan {
+		background-color: darken( $blue-medium, 10 );
+	}
+
+	&.is-personal-plan {
+		background-color: darken( $alert-yellow, 10 );
+	}
+
+	&.is-business-plan {
+		background-color: darken( $alert-purple, 10 );
+	}
 }
 
 .plan-thank-you-card__header {
@@ -22,10 +34,46 @@
 	line-height: 1.2;
 	border-radius: 6px 6px 0 0;
 	overflow: hidden;
+	z-index: z-index( 'root', '.plan-thank-you-card__header' );
 
 	@include breakpoint( ">480px" ) {
 		padding: 32px 0 15px;
 	}
+}
+
+.is-free-plan .plan-thank-you-card__header {
+	background-color: $blue-medium;
+}
+
+.is-personal-plan .plan-thank-you-card__header {
+	background-color: $alert-yellow;
+}
+
+.is-business-plan .plan-thank-you-card__header  {
+	background-color: $alert-purple;
+}
+
+.plan-thank-you-card__header .plan-icon {
+	width: 140px;
+	position: relative;
+	z-index: z-index( '.plan-thank-you-card__header', '.plan-icon' );
+}
+
+.is-personal-plan .plan-thank-you-card__header .plan-icon .plan-icon__personal-0 {
+	fill: darken( $alert-yellow, 10 );
+}
+
+.is-premium-plan .plan-thank-you-card__header .plan-icon .plan-icon__premium-0 {
+	fill: darken( $alert-green, 10 );
+}
+
+.is-business-plan .plan-thank-you-card__header .plan-icon .plan-icon__business-0 {
+	fill: darken( $alert-purple, 10 );
+}
+
+.plan-thank-you-card__header-detail {
+	position: relative;
+	z-index: z-index( '.plan-thank-you-card__header', '.plan-thank-you-card__header-detail' );
 }
 
 .plan-thank-you-card__body {
@@ -101,6 +149,87 @@
 	color: darken( $alert-green, 30 );
 }
 
+.is-free-plan {
+	.plan-thank-you-card__button,
+	.plan-thank-you-card__button:visited {
+		color: darken( $blue-medium, 30 );
+		border-color: darken( $blue-medium, 20 );
+
+		&.is-placeholder {
+			background-color: lighten( $blue-medium, 40 );
+		}
+	}
+
+	.plan-thank-you-card__button {
+		&:hover {
+			border-color: darken( $blue-medium, 30 );
+			color: darken( $blue-medium, 10 );
+		}
+
+		&:focus {
+			color: darken( $blue-medium, 10 );
+		}
+
+		&:active {
+			color: darken( $blue-medium, 30 );
+		}
+	}
+}
+
+.is-personal-plan {
+	.plan-thank-you-card__button,
+	.plan-thank-you-card__button:visited {
+		color: darken( $alert-yellow, 30 );
+		border-color: darken( $alert-yellow, 20 );
+
+		&.is-placeholder {
+			background-color: lighten( $alert-yellow, 40 );
+		}
+	}
+
+	.plan-thank-you-card__button {
+		&:hover {
+			border-color: darken( $alert-yellow, 30 );
+			color: darken( $alert-yellow, 10 );
+		}
+
+		&:focus {
+			color: darken( $alert-yellow, 10 );
+		}
+
+		&:active {
+			color: darken( $alert-yellow, 30 );
+		}
+	}
+}
+
+.is-business-plan {
+	.plan-thank-you-card__button,
+	.plan-thank-you-card__button:visited {
+		color: darken( $alert-purple, 30 );
+		border-color: darken( $alert-purple, 20 );
+
+		&.is-placeholder {
+			background-color: lighten( $alert-purple, 40 );
+		}
+	}
+
+	.plan-thank-you-card__button {
+		&:hover {
+			border-color: darken( $alert-purple, 30 );
+			color: darken( $alert-purple, 10 );
+		}
+
+		&:focus {
+			color: darken( $alert-purple, 10 );
+		}
+
+		&:active {
+			color: darken( $alert-purple, 30 );
+		}
+	}
+}
+
 .plan-thank-you-card__plan-name {
 	font-size: 18px;
 	font-weight: 500;
@@ -116,6 +245,25 @@
 	}
 }
 
+.is-free-plan .plan-thank-you-card__plan-name {
+	&.is-placeholder {
+		background-color: lighten( $blue-medium, 40 );
+	}
+}
+
+.is-personal-plan .plan-thank-you-card__plan-name {
+	&.is-placeholder {
+		background-color: lighten( $alert-yellow, 40 );
+	}
+}
+
+.is-business-plan .plan-thank-you-card__plan-name {
+	&.is-placeholder {
+		background-color: lighten( $alert-purple, 40 );
+	}
+}
+
+
 .plan-thank-you-card__plan-price {
 	font-size: 15px;
 	font-weight: 500;
@@ -128,6 +276,30 @@
 		margin-left: auto;
 		margin-right: auto;
 		width: 10%;
+	}
+}
+
+.is-free-plan .plan-thank-you-card__plan-price {
+	color: lighten( $blue-medium, 40 );
+
+	&.is-placeholder {
+		background-color: lighten( $blue-medium, 40 );
+	}
+}
+
+.is-personal-plan .plan-thank-you-card__plan-price {
+	color: lighten( $alert-yellow, 40 );
+
+	&.is-placeholder {
+		background-color: lighten( $alert-yellow, 40 );
+	}
+}
+
+.is-business-plan .plan-thank-you-card__plan-price  {
+	color: lighten( $alert-purple, 40 );
+
+	&.is-placeholder {
+		background-color: lighten( $alert-purple, 40 );
 	}
 }
 
@@ -158,6 +330,7 @@
 		position: absolute;
 		opacity: 0;
 		animation: floating 10s infinite ease-in-out;
+		z-index: z-index( '.plan-thank-you-card__header', '.plan-thank-you-card__background-icons .gridicon' );
 	}
 
 	.gridicon:nth-child(1) {
@@ -219,15 +392,5 @@
 		top: 161px;
 		left: 77.6%;
 		animation-delay: random(10) + s;
-	}
-}
-
-.plan-thank-you-card__main-icon {
-	width: 72px;
-	height: 72px;
-
-	@include breakpoint( ">480px" ) {
-		width: 96px;
-		height: 96px;
 	}
 }

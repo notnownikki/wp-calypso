@@ -16,11 +16,22 @@ import QuerySites from 'components/data/query-sites';
 import QuerySitePlans from 'components/data/query-site-plans';
 import { getPlan } from 'lib/plans';
 import formatCurrency from 'lib/format-currency';
+import PlanIcon from 'components/plans/plan-icon';
+import { getPlanClass } from 'lib/plans/constants';
 
 class PlanThankYouCard extends Component {
 	static propTypes = {
 		siteId: PropTypes.number.isRequired
 	};
+
+	getClassNames() {
+		const { plan } = this.props;
+		const planClass = plan && plan.productSlug
+			? getPlanClass( plan.productSlug )
+			: '';
+
+		return classnames( 'plan-thank-you-card', planClass );
+	}
 
 	render() {
 		const {
@@ -29,20 +40,24 @@ class PlanThankYouCard extends Component {
 			siteId,
 			siteURL,
 		} = this.props;
+
 		// Non standard gridicon sizes are used here because we use them as background pattern with various sizes and rotation
 		/* eslint-disable wpcalypso/jsx-gridicon-size */
 		return (
-			<div className="plan-thank-you-card">
+			<div className={ this.getClassNames() }>
 				<QuerySites siteId={ siteId } />
 				<QuerySitePlans siteId={ siteId } />
 				<div className="plan-thank-you-card__header">
-					<Gridicon className="plan-thank-you-card__main-icon" icon="checkmark-circle" size={ 140 } />
+					{
+						plan &&
+						<PlanIcon plan={ plan.productSlug } />
+					}
 					{ ! plan
-						? <div>
+						? <div className="plan-thank-you-card__header-detail">
 								<div className="plan-thank-you-card__plan-name is-placeholder"></div>
 								<div className="plan-thank-you-card__plan-price is-placeholder"></div>
 							</div>
-						: <div>
+						: <div className="plan-thank-you-card__header-detail">
 								<div className="plan-thank-you-card__plan-name">
 								{ translate( '%(planName)s Plan', {
 									args: { planName: getPlan( plan.productSlug ).getTitle() }
