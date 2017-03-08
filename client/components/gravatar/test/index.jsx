@@ -13,9 +13,10 @@ import { Gravatar } from '../';
 describe( 'Gravatar', () => {
 	/**
 	 * Gravatar URLs use email hashes
+	 * Here we're hashing MyEmailAddress@example.com
 	 * @see https://en.gravatar.com/site/implement/hash/
 	 */
-	const gravatarHash = 'cf55adb1a5146c0a11a808bce7842f7b';
+	const gravatarHash = 'f9879d71855b5ff21e4963273a886bfc';
 
 	const avatarUrl = `https://0.gravatar.com/avatar/${ gravatarHash }?s=96&d=mm`;
 
